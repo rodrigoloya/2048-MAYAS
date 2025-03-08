@@ -3,9 +3,9 @@
 
 $field-width: 500px;
 $grid-spacing: 15px;
-$legend-spacing: $grid-spacing / 2;
+$legend-spacing: calc($grid-spacing / 2);
 $grid-row-cells: 4;
-$tile-size: ($field-width - $grid-spacing * ($grid-row-cells + 1)) / $grid-row-cells;
+$tile-size: calc( ($field-width - $grid-spacing * ($grid-row-cells + 1)) / $grid-row-cells);
 $tile-border-radius: 3px;
 $legend-border-radius: 2px;
 
@@ -59,7 +59,7 @@ html, body {
 
 body {
   padding: 80px 0;
-  background-image: url(img/bg.jpg);
+  background-image: url(img/bg.png);
   background-position: top center;
   background-repeat: no-repeat;
 }
@@ -100,11 +100,12 @@ h1.title {
   }
 }
 
-.scores-container {
+.scores-container, .scores-points {
   text-align: right;
 }
 
-.score-container, .best-container {
+.score-container, .best-container,
+.score-points, .best-points {
   $height: 19px;
 
   overflow: hidden;
@@ -151,7 +152,7 @@ h1.title {
   }
 }
 
-.best-container {
+.best-container, .best-points {
   float: right;
 }
 
@@ -163,11 +164,26 @@ h1.title {
   content: "Best"
 }
 
+.best-points:after{ 
+  content: "Best Points";
+}
+.score-points:after{
+  content: "Points";
+}
+
 p {
   margin-top: 0;
   margin-bottom: 10px;
   line-height: 1.65;
+
+  &.disclaimer {
+    font-size: .8em;
+    margin-top: 20px;
+  }
 }
+
+
+ 
 
 a {
   color: $text-color;
@@ -399,8 +415,8 @@ hr {
 
     &.tile-#{$power} .tile-inner {
       // Calculate base background color
-      $gold-percent: ($exponent - 1) / ($limit - 1) * 100;
-      $mixed-background: mix($tile-gold-color, $tile-color, $gold-percent);
+      $gold-percent: calc(($exponent - 1) / ($limit - 1)) * 100;
+      $mixed-background: mix($tile-gold-color, $tile-color, $gold-percent * 1%);
 
       $nth-color: nth($special-colors, $exponent);
 
@@ -408,7 +424,7 @@ hr {
       $bright-color: nth($nth-color, 2);
 
       @if $special-background {
-        $mixed-background: mix($special-background, $mixed-background, $mix-perc);
+        $mixed-background: mix($special-background, $mixed-background, $mix-perc );
       }
 
       @if $bright-color {
@@ -416,14 +432,14 @@ hr {
       }
 
       // Set background
-      background: $mixed-background;
+      background: $mixed-background; 
 
       // Add glow
-      $glow-opacity: max($exponent - 4, 0) / ($limit - 4);
+      $glow-opacity: calc(max($exponent - 4, 0) / ($limit - 4));
 
       @if not $special-background {
-        box-shadow: 0 0 30px 10px rgba($tile-gold-glow-color, $glow-opacity / 1.8),
-                    inset 0 0 0 1px rgba(white, $glow-opacity / 3);
+        box-shadow: 0 0 30px 10px rgba($tile-gold-glow-color, calc($glow-opacity / 1.8)),
+                    inset 0 0 0 1px rgba(white, calc($glow-opacity / 3));
       }
 
       // Adjust font size for bigger numbers
@@ -524,7 +540,7 @@ hr {
   $field-width: 280px;
   $grid-spacing: 10px;
   $grid-row-cells: 4;
-  $tile-size: ($field-width - $grid-spacing * ($grid-row-cells + 1)) / $grid-row-cells;
+  $tile-size: calc(($field-width - $grid-spacing * ($grid-row-cells + 1)) / $grid-row-cells);
   $tile-border-radius: 3px;
   $game-container-margin-top: 17px;
 
@@ -607,12 +623,16 @@ hr {
 
 .legend-row {
   padding: 10px 5px;
+  display: flex;
   @include clearfix;
 
   p {
-    margin-left: ($field-width / 3);
-    margin-top: ($field-width / 12);
-    text-transform: uppercase;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-transform: capitalize;
+    padding-left: 20px;
   }
 }
 
@@ -633,8 +653,8 @@ hr {
 
   background: $game-container-background;
   border-radius: $legend-border-radius * 2;
-  width: ($field-width / 4) + $legend-border-radius * 2 - 1;
-  height: ($field-width / 4) + $legend-border-radius * 2 - 1;
+  width: calc($tile-size/2) + $legend-spacing * 2 ;
+  height: calc($tile-size/2) + $legend-spacing * 2 ;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -643,8 +663,8 @@ hr {
 }
 
 .legend-cell {
-  width: $tile-size;
-  height: $tile-size;
+  width: calc($tile-size/2);
+  height: calc($tile-size/2);
   margin-right: $legend-spacing;
   float: left;
 
@@ -666,8 +686,8 @@ $exponent: 1;
 
   .cell-#{$power} {
     // Calculate base background color
-    $gold-percent: ($exponent - 1) / ($limit - 1) * 100;
-    $mixed-background: mix($tile-gold-color, $tile-color, $gold-percent);
+    $gold-percent: calc(($exponent - 1) / ($limit - 1)) * 100;
+    $mixed-background: mix($tile-gold-color, $tile-color, $gold-percent * 1%);
 
     $nth-color: nth($special-colors, $exponent);
 
@@ -675,7 +695,7 @@ $exponent: 1;
     $bright-color: nth($nth-color, 2);
 
     @if $special-background {
-      $mixed-background: mix($special-background, $mixed-background, $mix-perc);
+      $mixed-background: mix($special-background, $mixed-background, $mix-perc * 1%);
     }
 
     @if $bright-color {
@@ -686,13 +706,13 @@ $exponent: 1;
     background: $mixed-background;
 
     // Add glow
-    $glow-opacity: max($exponent - 4, 0) / ($limit - 4);
+    $glow-opacity: calc(max($exponent - 4, 0) / ($limit - 4));
 
     @if not $special-background {
-      box-shadow: 0 0 30px 5px rgba($tile-gold-glow-color, $glow-opacity / 1.8),
-                  inset 0 0 0 1px rgba(white, $glow-opacity / 3);
+      box-shadow: 0 0 30px 5px rgba($tile-gold-glow-color, calc($glow-opacity / 1.8)),
+                  inset 0 0 0 1px rgba(white, calc($glow-opacity / 3));
     }
-  }
+  } 
 
   $exponent: $exponent + 1;
 }
